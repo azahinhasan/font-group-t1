@@ -1,5 +1,3 @@
-// src/modules/fonts/fonts.dto.ts
-
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateFontDto {

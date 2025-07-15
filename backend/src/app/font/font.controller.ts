@@ -32,18 +32,10 @@ export class FontsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @GetIssuer() issuer: any) {
+  findOne(@Param('id') id: string) {
     return this.fontsService.findOne(id);
   }
 
-  // @Put(':id')
-  // update(
-  //   @GetIssuer() issuer: any,
-  //   @Body() dto: UpdateFontDto,
-  //   @Param('id') id: string,
-  // ) {
-  //   return this.fontsService.update({ ...dto, id }, issuer.user.id);
-  // }
 
   @Delete(':id')
   remove(@Param('id') id: string, @GetIssuer() issuer: any) {

@@ -12,11 +12,13 @@ import { LoggingsService } from '../../logging/logging.service';
 import { PaginationDto } from 'src/common/pagination.dto';
 import * as fs from 'fs';
 import * as path from 'path';
+import { FontGroupsService } from '../font-group/font-group.service';
 @Injectable()
 export class FontsService {
   constructor(
     @InjectModel(Font.name) private fontModel: Model<FontDocument>,
     private readonly logsService: LoggingsService,
+    private readonly fontGroupService: FontGroupsService,
   ) {}
 
   async createFromUpload(file: Express.Multer.File) {
@@ -150,6 +152,14 @@ export class FontsService {
     try {
       const font = await this.fontModel.findById(id).session(session);
       if (!font) throw new NotFoundException('Font not found');
+
+      const isUsed = await this.fontGroupService.fontPresentInGroup(id);
+
+      if (isUsed) {
+        throw new ForbiddenException(
+          'Cannot delete font: it is used in a font group',
+        );
+      }
 
       const deleted = await this.fontModel
         .findByIdAndDelete(id, { session })

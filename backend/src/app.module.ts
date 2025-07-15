@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FontsModule } from './app/font/font.module';
 import { LoggingModule } from './logging/logging.module';
+import { FontGroupsModule } from './app/font-group/font-group.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { LoggingModule } from './logging/logging.module';
       bufferCommands: false,
     }),
     FontsModule,
+    FontGroupsModule,
     LoggingModule,
   ],
   // controllers: [AppController],
