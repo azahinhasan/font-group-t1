@@ -33,8 +33,8 @@ export class FontGroupsController {
   }
 
   @Put(':id')
-  update(@GetIssuer() issuer: any, @Body() dto: UpdateFontGroupDto) {
-    return this.fontGroupsService.update(dto);
+  update(@Param('id') id: string, @Body() dto: UpdateFontGroupDto) {
+    return this.fontGroupsService.update(id,dto);
   }
 
   @Delete(':id')

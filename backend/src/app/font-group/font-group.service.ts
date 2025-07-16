@@ -89,18 +89,18 @@ export class FontGroupsService {
     return fontGroup;
   }
 
-  async update(dto: UpdateFontGroupDto) {
+  async update(id:string,dto: UpdateFontGroupDto) {
     const session = await this.fontGroupModel.db.startSession();
     session.startTransaction();
 
     try {
       const fontGroup = await this.fontGroupModel
-        .findById(dto.id)
+        .findOne({_id:id})
         .session(session);
       if (!fontGroup) throw new NotFoundException('Font group not found');
 
       const updated = await this.fontGroupModel
-        .findByIdAndUpdate(dto.id, dto, { new: true, session })
+        .findByIdAndUpdate(id, dto, { new: true, session })
         .exec();
 
       await this.logsService.create('UPDATE_FONT_GROUP', 'SUCCESS');

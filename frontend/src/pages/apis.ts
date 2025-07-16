@@ -1,6 +1,5 @@
 import api from "../lib/axios";
 
-
 const fetchFonts = async ({ queryKey }: { queryKey: any }) => {
   const [_key, page] = queryKey;
   const res = await api.get(`/font?page=${page}&limit=5`);
@@ -21,4 +20,31 @@ const deleteFont = async (id: string) => {
   return res.data;
 };
 
-export { fetchFonts, uploadFont, deleteFont };
+const fetchFontGroups = async () => {
+  const res = await api.get("/font-group");
+  return res.data;
+};
+
+const createFontGroup = async (payload) => {
+  const res = await api.post("/font-group", payload);
+  return res.data;
+};
+
+const deleteFontGroup = async (id:string) => {
+  const res = await api.delete(`/font-group/${id}`);
+  return res.data;
+};
+
+const updateFontGroup = async ({ id, payload }) => {
+  const res = await api.put(`/font-group/${id}`, payload);
+  return res.data;
+};
+export {
+  fetchFonts,
+  uploadFont,
+  deleteFont,
+  fetchFontGroups,
+  createFontGroup,
+  deleteFontGroup,
+  updateFontGroup
+};

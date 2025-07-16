@@ -7,7 +7,7 @@ function App() {
   const [activeTab, setActiveTab] = useState("fonts");
 
   return (
-    <div className="p-4">
+    <div className="p-4 shadow-sm border border-gray-200 rounded-2md">
       <div className="flex gap-2 mb-4">
         <button
           onClick={() => setActiveTab("fonts")}
