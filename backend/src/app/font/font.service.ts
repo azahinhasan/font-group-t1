@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ForbiddenException,
   InternalServerErrorException,
+  ConflictException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -35,6 +36,14 @@ export class FontsService {
     const session = await this.fontModel.db.startSession();
     session.startTransaction();
     try {
+      const existing = await this.fontModel
+        .findOne({ name: dto.name })
+        .session(session);
+      if (existing) {
+        throw new ConflictException(
+          `Font with name "${dto.name}" already exists.`,
+        );
+      }
       const font = await this.fontModel.create([{ ...dto }], { session });
 
       await this.logsService.create('CREATE_FONT', 'SUCCESS');
@@ -49,7 +58,7 @@ export class FontsService {
 
       await this.logsService.create('CREATE_FONT', 'FAILED');
       console.error(error);
-      throw new InternalServerErrorException('Failed to create font');
+      throw new InternalServerErrorException(error||'Failed to create font');
     }
   }
   async findAll(pagination: PaginationDto) {

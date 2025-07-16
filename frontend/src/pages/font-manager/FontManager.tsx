@@ -167,7 +167,10 @@ export default function FontManager() {
               <p>Click or drag a .ttf file here</p>
             </label>
             {uploadMutation.isError && (
-              <p className="mt-4 text-red-600">Upload failed</p>
+              <p className="mt-4 text-red-600 text-sm">
+                {(uploadMutation.error as any)?.response?.data?.message ||
+                  "Upload failed. Please try again."}
+              </p>
             )}
           </div>
         </div>
@@ -183,10 +186,8 @@ export default function FontManager() {
 
             {deleteMutation.isError && (
               <p className="text-red-600 text-sm mb-2">
-                {
-                  (deleteMutation.error as any)?.response?.data?.message ||
-                    "Something went wrong while deleting."
-                }
+                {(deleteMutation.error as any)?.response?.data?.message ||
+                  "Something went wrong while deleting."}
               </p>
             )}
 
