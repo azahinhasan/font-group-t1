@@ -1,26 +1,6 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import api from "../../lib/axios";
-
-const fetchFonts = async ({ queryKey }: { queryKey: any }) => {
-  const [_key, page] = queryKey;
-  const res = await api.get(`/font?page=${page}&limit=5`);
-  return res.data;
-};
-
-const uploadFont = async (file: File) => {
-  const formData = new FormData();
-  formData.append("font", file);
-  const res = await api.post("/font", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return res.data;
-};
-
-const deleteFont = async (id: string) => {
-  const res = await api.delete(`/font/${id}`);
-  return res.data;
-};
+import { deleteFont, fetchFonts, uploadFont } from "../apis";
 
 export default function FontManager() {
   const queryClient = useQueryClient();
@@ -90,7 +70,7 @@ export default function FontManager() {
             </thead>
             <tbody>
               {fontsList.map((font: any) => (
-                <tr key={font._id} className="border-t">
+                <tr key={font._id} className="border-t text-left">
                   <td className="p-3">{font.name}</td>
                   <td className="p-3">
                     <span style={{ fontFamily: font.name }} className="text-lg">
@@ -108,7 +88,7 @@ export default function FontManager() {
                   <td className="p-3">
                     <button
                       onClick={() => setDeleteTarget(font._id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                      className="bg-red-400 text-white px-3 py-1 rounded hover:bg-red-900"
                     >
                       Delete
                     </button>
@@ -149,9 +129,12 @@ export default function FontManager() {
       {/* Upload Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 shadow-lg w-96 relative">
+          <div className="bg-white rounded-lg p-6 shadow-lg w-120 relative">
             <button
-              onClick={() => setModalOpen(false)}
+              onClick={() => {
+                setModalOpen(false);
+                uploadMutation.reset();
+              }}
               className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl"
             >
               &times;
