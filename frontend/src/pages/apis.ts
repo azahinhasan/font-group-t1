@@ -1,3 +1,4 @@
+import { CreateFontGroup, UpdateFontGroup } from "../interfaces";
 import api from "../lib/axios";
 
 const fetchFonts = async ({ queryKey }: { queryKey: any }) => {
@@ -25,7 +26,7 @@ const fetchFontGroups = async () => {
   return res.data;
 };
 
-const createFontGroup = async (payload) => {
+const createFontGroup = async (payload:CreateFontGroup) => {
   const res = await api.post("/font-group", payload);
   return res.data;
 };
@@ -35,8 +36,9 @@ const deleteFontGroup = async (id:string) => {
   return res.data;
 };
 
-const updateFontGroup = async ({ id, payload }) => {
-  const res = await api.put(`/font-group/${id}`, payload);
+const updateFontGroup = async (payload:UpdateFontGroup) => {
+  const {_id,...data}=payload
+  const res = await api.put(`/font-group/${_id}`, data);
   return res.data;
 };
 export {

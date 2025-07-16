@@ -8,6 +8,7 @@ import {
   fetchFonts,
 } from "../apis";
 import { AxiosError } from "axios";
+import { FontGroup, UpdateFontGroup } from "../../interfaces";
 
 export default function FontGroupManager() {
   const queryClient = useQueryClient();
@@ -15,8 +16,8 @@ export default function FontGroupManager() {
   const [groupName, setGroupName] = useState("");
   const [fontRows, setFontRows] = useState([""]);
   const [error, setError] = useState("");
-  const [deleteTarget, setDeleteTarget] = useState(null);
-  const [editTarget, setEditTarget] = useState<any>(null);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [editTarget, setEditTarget] = useState<FontGroup | null>(null);
   const [page, setPage] = useState(1);
 
   const { data: fontGroups = {}, isLoading } = useQuery({
@@ -70,8 +71,9 @@ export default function FontGroupManager() {
     setError("");
     if (editTarget) {
       updateMutation.mutate({
-        id: editTarget._id,
-        payload: { name: groupName, fonts: uniqueFonts },
+        _id: editTarget._id,
+        name: groupName,
+        fonts: uniqueFonts,
       });
     } else {
       createMutation.mutate({ name: groupName, fonts: uniqueFonts });
@@ -102,53 +104,62 @@ export default function FontGroupManager() {
       {isLoading ? (
         <p>Loading font groups...</p>
       ) : (
-        <table className="min-w-full bg-white shadow rounded">
-          <thead>
-            <tr className="bg-gray-100 text-left">
-              <th className="p-3">Group Name</th>
-              <th className="p-3">Fonts</th>
-              <th className="p-3">Count</th>
-              <th className="p-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fontGroupList.map((group) => (
-              <tr key={group._id} className="border-t">
-                <td className="p-3 font-medium">{group.name}</td>
-                <td className="p-3 text-sm">
-                  {group.fonts.map((f: { name: string }) => f.name).join(", ")}
-                </td>
-                <td className="p-3">{group.fonts.length}</td>
-                <td className="p-3 space-x-2">
-                  <button
-                    onClick={() => {
-                      setGroupName(group.name);
-                      setFontRows(group.fonts.map((f) => f._id));
-                      setEditTarget(group);
-                      setModalOpen(true);
-                    }}
-                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => setDeleteTarget(group._id)}
-                    className="bg-red-400 text-white px-3 py-1 rounded hover:bg-red-900"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white shadow rounded">
+            <thead>
+              <tr className="bg-gray-100 text-left">
+                <th className="p-3">Group Name</th>
+                <th className="p-3">Fonts</th>
+                <th className="p-3">Count</th>
+                <th className="p-3">Actions</th>
               </tr>
-            ))}
-            {fontGroupList.length === 0 && (
-              <tr>
-                <td colSpan={4} className="text-center p-4 text-gray-500">
-                  No groups found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {fontGroupList.map((group: FontGroup) => (
+                <tr key={group._id} className="border-t text-left">
+                  <td className="p-3 font-medium">{group.name}</td>
+                  <td className="p-3 text-sm">
+                    {(() => {
+                      const fontNames = group.fonts
+                        .map((f) => f.name)
+                        .join(", ");
+                      return fontNames.length > 40
+                        ? fontNames.slice(0, 40) + "..."
+                        : fontNames;
+                    })()}
+                  </td>
+                  <td className="p-3">{group.fonts.length}</td>
+                  <td className="p-3 space-x-2">
+                    <button
+                      onClick={() => {
+                        setGroupName(group.name);
+                        setFontRows(group.fonts.map((f) => f._id));
+                        setEditTarget(group);
+                        setModalOpen(true);
+                      }}
+                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => setDeleteTarget(group._id)}
+                      className="bg-red-400 text-white px-3 py-1 rounded hover:bg-red-900"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {fontGroupList.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="text-center p-4 text-gray-500">
+                    No groups found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <div className="mt-4 flex justify-end gap-2">
@@ -198,7 +209,7 @@ export default function FontGroupManager() {
                 className="w-full mb-2 px-3 py-2 border rounded"
               >
                 <option value="">Select Font</option>
-                {fonts?.data?.map((font) => (
+                {fonts?.data?.map((font: UpdateFontGroup) => (
                   <option
                     key={font._id}
                     value={font._id}
