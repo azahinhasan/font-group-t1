@@ -11,7 +11,7 @@ function App() {
       <div className="flex gap-2 mb-4">
         <button
           onClick={() => setActiveTab("fonts")}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded hover:cursor-pointer ${
             activeTab === "fonts" ? "bg-blue-600 text-white" : "bg-gray-200"
           }`}
         >
@@ -19,7 +19,7 @@ function App() {
         </button>
         <button
           onClick={() => setActiveTab("groups")}
-          className={`px-4 py-2 rounded ${
+          className={`px-4 py-2 rounded hover:cursor-pointer ${
             activeTab === "groups" ? "bg-blue-600 text-white" : "bg-gray-200"
           }`}
         >

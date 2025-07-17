@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: font-service-backend-by-zahin
+    ports:
+      - "5016:5016"
+    environment:
+      - PORT=5016
+      - MONGO_URI=mongodb+srv://admin:lPUXdwbhFnFtaHnH@cluster0.u3psp.mongodb.net/font_service
+      - JWT_ACCESS_SECRET=yourAccessSecretHere
+      - JWT_REFRESH_SECRET=yourRefreshSecretHere
+    restart: on-failure:3
+  frontend:
+    build:
+      context: ./frontend
+    container_name: font-service-frontend-by-zahin
+    ports:
+      - "3033:3033"
+    environment:
+      - VITE_SERVER_ENDPOINT=http://localhost:5016/api/v1
+      - VITE_API_FILE_URL=http://localhost:5016
+    depends_on:
+      - backend
+    restart: on-failure:2
