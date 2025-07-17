@@ -1,32 +1,50 @@
-# font-group-t1
+# Getting Started
 
-=== Font Upload (form-data, NOT JSON) ===
-POST /font
-- form data type
-- KEY: font (type: File) → select .ttf file
+## Technology Used
+- Nest js
+- React js
+- TypeScript
+- MongoDB
+- Tailwind css
+- Mongoose
+- Docker and more.
 
+## Running the Project
+### Option 1: Run with Docker (Recommended)
+Navigate to the project folder and run the following command(make sure docker is running on the system):
+```bash
+docker-compose up --build
+```
+or
+```bash
+docker compose up --build
+```
+Docker will handle all dependencies, making setup simpler.
 
-=== Create Font Group ===
-POST /font-group
-Content-Type: application/json
+- The frontend will be accessible at `http://localhost:3033`.
+- The backend server will be accessible at `http://localhost:5016`.
 
-{
-  "name": "My Font Group",
-  "fonts": ["64ff88d9f534b86a4f57a901", "64ff88d9f534b86a4f57a902"]
-}
+### Option 2: Run without Docker
+Ensure the following are installed:
+- **Node.js** (version 22)
 
-=== Update Font Group ===
-PUT /font-group/64ff9a01f534b86a4f57a9ff
+#### Steps
+1. **Backend Setup**
+    - Navigate to the `Backend` folder.
+    - Optional: If needed modify `.env` from `./configs` folder.
+    - Install dependencies and set up the database:
+      ```bash
+      yarn install
+      yarn dev
+      ```
+      This will configure the database and seed it with some dummy data. The backend server will be accessible at `http://localhost:5016`.
 
-{
-  "name": "Updated Font Group Name",
-  "fonts": ["64ff88d9f534b86a4f57a901", "64ff88d9f534b86a4f57a903"]
-}
-
-=== Example for GET Requests ===
-GET /font
-GET /font-group
-
-=== Example for DELETE Requests ===
-DELETE /font/64ff88d9f534b86a4f57a901
-DELETE /font-group/64ff9a01f534b86a4f57a9ff
+2. **Frontend Setup**
+    - Navigate to the `Frontend` folder.
+    - Create an `.env` file by following the structure in `.env.example`.
+    - Install dependencies and start the development server:
+      ```bash
+      yarn install
+      yarn dev
+      ```
+      The frontend will be accessible at `http://localhost:3033`.
