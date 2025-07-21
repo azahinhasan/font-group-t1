@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3033
 
-CMD ["npm", "run", "build-preview"]
+CMD ["yarn", "run", "build-preview"]
